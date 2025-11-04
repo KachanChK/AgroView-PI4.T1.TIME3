@@ -48,6 +48,7 @@ Durante o desenvolvimento do AgroView, foram tomadas as seguintes decisões de a
 5. **Rotas/Endpoints:** 
 
 * Cadastrar novo Plantio: "/novoPlantio"
+   -Tabela Plantio: plantio, area, quantidadePlantio, gastoEstimado, producaoEsperada, observacoes, status, dataPlantio
 
 ---
 
