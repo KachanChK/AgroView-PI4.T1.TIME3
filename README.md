@@ -34,18 +34,20 @@ Durante o desenvolvimento do AgroView, foram tomadas as seguintes decisões de a
 
 1. **Linguagem:**
    Optou-se pelo uso de **Java** no backend para garantir escalabilidade, segurança e integração com APIs externas (ex: APIs meteorológicas).
-   A escolha foi feita devido à robustez do ecossistema Spring e sua facilidade na criação de REST APIs.
 
 2. **Banco de Dados:**
-   Utilizou-se o **MongoDB** como banco de dados principal por sua flexibilidade na modelagem de dados não estruturados e integração simples com aplicações Java via Spring Data.
+   Utilizou-se o **MongoDB** como banco de dados principal por sua flexibilidade na modelagem de dados não estruturados e integração simples.
 
-3. **Integração com APIs Climáticas:**
+3. **Integração com APIs Climáticas: (Em breve)**
    Decidiu-se pela integração com uma **API meteorológica externa** (como OpenWeather ou WeatherAPI) para obter dados climáticos em tempo real e previsões semanais.
 
-4. **Geração de Relatórios:**
+4. **Geração de Relatórios: (Em breve)**
    Os relatórios são gerados dinamicamente a partir dos dados do banco, com possibilidade de exportação em **PDF**.
    A biblioteca **iTextPDF** foi escolhida pela sua confiabilidade e facilidade de uso com Java.
 
+5. **Rotas/Endpoints:** 
+
+* Cadastrar novo Plantio: "/novoPlantio"
 
 ---
 
