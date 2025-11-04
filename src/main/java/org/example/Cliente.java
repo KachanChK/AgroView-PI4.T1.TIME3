@@ -47,6 +47,55 @@ public class Cliente {
             return;
         }
 
+        Parceiro servidor = null;
+        try{
+            servidor = new Parceiro(conexao, receptor, transmissor);
+        } catch (Exception erro){
+            System.err.println("Indique o servidor e a porta");
+            return;
+        }
+
+        TratadoraDeComunicadoDeDesligamento tratadoraDeComunicadoDeDesligamento  = null;
+        try{
+            tratadoraDeComunicadoDeDesligamento = new TratadoraDeComunicadoDeDesligamento(servidor);
+        } catch (Exception erro){}
+
+        tratadoraDeComunicadoDeDesligamento.start();
+
+        char opcao = ' ';
+
+        do {
+            System.out.println("1- Logar\n2- Registrar\n0- Sair\n");
+            System.out.println("Digite opcao que deseja: ");
+
+            try{
+                opcao = Teclado.getUmChar();
+            } catch (Exception erro){
+                System.err.println("Opcao invalida! \n");
+                continue;
+            }
+
+            if ("120".indexOf( opcao ) == -1){
+                System.err.println("Opcao invalida! \n");
+                continue;
+            }
+
+
+
+
+            try{
+                servidor.receba (new PedidoPraSair());
+            } catch (Exception erro) {}
+
+            System.out.println("Obrigado por usar este programa!");
+            System.exit(0);
+        }
+
+        while(opcao != '0');
+        try{
+            servidor.receba (new PedidoPraSair());
+        } catch (Exception erro) {}
+
 
     }
 }

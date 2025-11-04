@@ -52,7 +52,17 @@ public class SupervisoraDeConexao extends Thread {
             synchronized (this.usuarios){
                 this.usuarios.add(this.usuario);
             }
-
+            for(;;){
+                Comunicado comunicado = this.usuario.envie();
+                if (comunicado == null){ return;}
+                
+                else if (comunicado instanceof PedidoPraSair){
+                    synchronized (this.usuarios){
+                        this.usuarios.remove(this.usuario);
+                    }
+                    this.usuario.adeus();
+                }
+            }
         } catch (Exception erro){
             try{
                 transmissor.close();

@@ -1,41 +1,55 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+
+import java.io.*;
 
 public class Teclado {
 
     private static BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
 
-    public static String getUmString() {
+    public static String getUmString(){
         String ret = null;
-        try {
+
+        try{
             ret = teclado.readLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        }catch(IOException e){}
+        return ret;
+    }
+
+    public static byte getUmByte() throws Exception{
+        byte ret = (byte)0;
+        try{
+            ret = Byte.parseByte(teclado.readLine());
+        }catch (NumberFormatException e){
+            throw new Exception("Byte Invalido");
         }
         return ret;
     }
 
-    public static char getUmChar() {
+    public static int getUmInt() throws Exception{
+        int ret = 0;
+        try{
+            Integer.parseInt(teclado.readLine());
+        }
+        catch(NumberFormatException e){
+            throw new Exception("Int Invalido");
+        }
+        return ret;
+    }
+
+    public static char getUmChar() throws Exception{
         char ret = ' ';
-        try {
-            ret = Character.valueOf(teclado.readLine().charAt(0));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return ret;
-    }
+        try{
+            String str = teclado.readLine();
 
-    public static double getUmDouble() {
-        double ret = 0.0;
-        try {
-            ret = Double.parseDouble(teclado.readLine());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            if(str.length() != 1){
+                throw new Exception("Char Invalido");
+            }
+            ret = str.charAt(0);
+        } catch(IOException e){}
         return ret;
     }
 }
+
 
