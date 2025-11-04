@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Servidor {
 
-    public static final String PORTA_PADRAO = "3000";
+    public static final String PORTA_PADRAO = "4000";
 
     public static void main(String[] args) {
 
