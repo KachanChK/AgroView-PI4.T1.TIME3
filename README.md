@@ -49,6 +49,10 @@ Durante o desenvolvimento do AgroView, foram tomadas as seguintes decisões de a
 
 * Cadastrar novo Plantio: "/novoPlantio"
    -Tabela Plantio: plantio, area, quantidadePlantio, gastoEstimado, producaoEsperada, observacoes, status, dataPlantio
+  
+6. **Tabelas:**
+   
+* **Plantio:** plantio, area, quantidadePlantio, gastoEstimado, producaoEsperada, observacoes, status, dataPlantio
 
 ---
 
