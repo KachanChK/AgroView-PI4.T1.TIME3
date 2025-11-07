@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.bson.Document;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -46,7 +47,15 @@ public class NovoPlantioHandler implements HttpHandler {
 
         // Lê o corpo da requisição (JSON)
         InputStream inputStream = exchange.getRequestBody();
-        String json = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        byte[] tmp = new byte[1024];
+        int bytesRead;
+    
+        while ((bytesRead = inputStream.read(tmp)) != -1) {
+            buffer.write(tmp, 0, bytesRead);
+        }
+
+        String json = new String(buffer.toByteArray(), StandardCharsets.UTF_8);
 
         // Conecta ao MongoDB
         MongoDatabase db = MongoConnection.getDatabase();
