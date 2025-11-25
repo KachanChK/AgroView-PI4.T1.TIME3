@@ -1,101 +1,75 @@
 package org.example;
+
 import java.net.*;
 import java.io.*;
 
 public class Cliente {
+
     public static final String HOST_PADRAO = "localhost";
-    public static final int PORTA_PADRAO = 4000;
+    public static final int PORTA_PADRAO  = 4000;
+
+    // Porta para Node.js enviar a senha
+    public static final int PORTA_NODE = 1010;
 
     public static void main(String[] args) throws Exception {
 
-        if (args.length > 2) {
-            System.err.println("Uso esperado: java Cliente [HOST [PORTA]]\n");
-            return;
-        }
+        ServerSocket portaParaNode = new ServerSocket(PORTA_NODE);
+        System.out.println("Aguardando Node.js na porta " + PORTA_NODE + "...");
 
-        Socket conexao = null;
-        try {
-            String host = Cliente.HOST_PADRAO;
-            int porta = Cliente.PORTA_PADRAO;
+        while (true) {
 
-            if (args.length > 0) {
-                host = args[0];
-            }
+            Socket conexaoNode = portaParaNode.accept();
+            System.out.println("Node.js conectado!");
 
-            if (args.length == 2) {
-                porta = Integer.parseInt(args[1]);
-            }
+            BufferedReader inNode = new BufferedReader(
+                    new InputStreamReader(conexaoNode.getInputStream())
+            );
+            PrintWriter outNode = new PrintWriter(
+                    conexaoNode.getOutputStream(), true
+            );
 
-            conexao = new Socket(host, porta);
-        } catch (Exception erro) {
-            System.err.println("Indique o servidor e a porta");
-        }
+            // recebe a senha do Node
+            String senhaRecebida = inNode.readLine();
+            System.out.println("Recebido: " + senhaRecebida);
 
-        ObjectOutputStream transmissor = null;
-        try {
-            transmissor = new ObjectOutputStream(conexao.getOutputStream());
-        } catch (Exception erro) {
-            System.err.println("Indique o servidor e a porta");
-            return;
-        }
-
-        ObjectInputStream receptor = null;
-        try {
-            receptor = new ObjectInputStream(conexao.getInputStream());
-        } catch (Exception erro) {
-            System.err.println("Indique o servidor e a porta");
-            return;
-        }
-
-        Parceiro servidor = null;
-        try{
-            servidor = new Parceiro(conexao, receptor, transmissor);
-        } catch (Exception erro){
-            System.err.println("Indique o servidor e a porta");
-            return;
-        }
-
-        TratadoraDeComunicadoDeDesligamento tratadoraDeComunicadoDeDesligamento  = null;
-        try{
-            tratadoraDeComunicadoDeDesligamento = new TratadoraDeComunicadoDeDesligamento(servidor);
-        } catch (Exception erro){}
-
-        tratadoraDeComunicadoDeDesligamento.start();
-
-        char opcao = ' ';
-
-        do {
-            System.out.println("1- Logar\n2- Registrar\n0- Sair\n");
-            System.out.println("Digite opcao que deseja: ");
-
-            try{
-                opcao = Teclado.getUmChar();
-            } catch (Exception erro){
-                System.err.println("Opcao invalida! \n");
+            if (senhaRecebida.startsWith("GET") || senhaRecebida.startsWith("POST")) {
+                System.out.println("Ignorando requisição HTTP...");
+                conexaoNode.close();
                 continue;
             }
 
-            if ("120".indexOf( opcao ) == -1){
-                System.err.println("Opcao invalida! \n");
+            boolean senhaValida = new Senha(senhaRecebida).isSenhaValida();
+
+            // devolve o resultado (true/false)
+            outNode.println(senhaValida ? "true" : "false");
+
+            // Se a senha for inválida, encerra e espera outro Node conectar
+            if (!senhaValida) {
+                conexaoNode.close();
                 continue;
             }
 
+            // -----------------------------
+            //  SOMENTE AQUI CONECTA AO SERVIDOR JAVA
+            // -----------------------------
+            Socket conexaoServidor = new Socket(HOST_PADRAO, PORTA_PADRAO);
+            ObjectOutputStream transmissor =
+                    new ObjectOutputStream(conexaoServidor.getOutputStream());
+            ObjectInputStream receptor =
+                    new ObjectInputStream(conexaoServidor.getInputStream());
 
+            Parceiro servidor = new Parceiro(conexaoServidor, receptor, transmissor);
 
+            // envia pedido para sair
+            servidor.receba(new PedidoPraSair());
 
-            try{
-                servidor.receba (new PedidoPraSair());
-            } catch (Exception erro) {}
+            // fecha tudo
+            conexaoServidor.close();
+            conexaoNode.close();
 
-            System.out.println("Obrigado por usar este programa!");
-            System.exit(0);
+            break; // encerra o cliente
         }
 
-        while(opcao != '0');
-        try{
-            servidor.receba (new PedidoPraSair());
-        } catch (Exception erro) {}
-
-
+        System.out.println("Cliente finalizado.");
     }
 }
