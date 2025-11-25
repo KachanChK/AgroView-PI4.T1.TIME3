@@ -1,0 +1,283 @@
+:root {
+    --agro-dark: #1a3c26;
+    --agro-green: #2E7D32;
+    --agro-bg: #f5f7fb;
+    --agro-green-light: #e8f5e9;
+    --agro-yellow-light: #fff8e1;
+    --agro-blue-light: #e3f2fd;
+}
+
+body {
+    background-color: var(--agro-bg);
+    font-family: sans-serif;
+    overflow-x: hidden;
+}
+
+.sidebar {
+    background-color: var(--agro-dark);
+    min-height: 100vh;
+    color: white;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    padding-top: 20px;
+    z-index: 1050;
+    transition: left 0.3s;
+}
+
+.sidebar.show {
+    left: 0;
+}
+
+@media (min-width: 992px) {
+    .sidebar {
+        left: 0;
+    }
+}
+
+.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.7);
+    padding: 15px 20px;
+    font-size: 1.1rem;
+    border-left: 4px solid transparent;
+}
+
+.sidebar .nav-link:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar .nav-link.active {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left: 4px solid white;
+}
+
+.brand-logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+
+.main-content {
+    padding: 30px;
+    margin-left: 0;
+    transition: margin-left 0.3s;
+}
+
+@media (min-width: 992px) {
+    .main-content {
+        margin-left: 250px;
+    }
+}
+
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+    display: none;
+}
+
+.sidebar-backdrop.show {
+    display: block;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: white;
+    padding: 15px 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px !important;
+}
+
+.kpi-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+}
+
+.kpi-card:hover {
+    transform: translateY(-3px);
+}
+
+.icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.bg-green-light {
+    background-color: #e8f5e9;
+    color: var(--agro-green);
+}
+
+.bg-orange-light {
+    background-color: #fff3e0;
+    color: #ff9800;
+}
+
+.section-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    height: 100%;
+}
+
+.profile-link {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.profile-link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.weather-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.weather-current-icon {
+    color: var(--agro-green);
+}
+
+.weather-hourly {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px 0;
+}
+
+.hourly-item {
+    display: inline-block;
+    width: 80px;
+    text-align: center;
+    border-right: 1px solid #eee;
+    padding: 0 10px;
+}
+
+.hourly-item:last-child {
+    border-right: none;
+}
+
+.new-btn {
+    background: var(--agro-green);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.new-btn:hover {
+    background: #266b2a;
+}
+
+.table-card {
+    background: white;
+    padding: 0;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.table thead th {
+    color: #555;
+    font-weight: bold;
+    border-bottom: 2px solid #eee;
+}
+
+.table td {
+    padding: 14px 10px;
+    vertical-align: middle;
+}
+
+.tag {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.tag-yellow {
+    background: var(--agro-yellow-light);
+    color: #c57c00;
+}
+
+.tag-green {
+    background: var(--agro-green-light);
+    color: var(--agro-green);
+}
+
+.tag-blue {
+    background: var(--agro-blue-light);
+    color: #1e88e5;
+}
+
+.filter-select {
+    width: 180px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+}
+
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+/* Adicionar para garantir que a imagem da logo se ajuste */
+.brand-logo img {
+    max-width: 100px;
+    /* Ajuste o tamanho da sua logo aqui */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Estilo para o botão primário do modal (para combinar com o new-btn) */
+.new-btn-primary {
+    background-color: var(--agro-green) !important;
+    border-color: var(--agro-green) !important;
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.new-btn-primary:hover {
+    background-color: #266b2a !important;
+    /* Cor mais escura no hover */
+    border-color: #266b2a !important;
+}
