@@ -49,9 +49,7 @@ public class Cliente {
                 continue;
             }
 
-            // -----------------------------
-            //  SOMENTE AQUI CONECTA AO SERVIDOR JAVA
-            // -----------------------------
+
             Socket conexaoServidor = new Socket(HOST_PADRAO, PORTA_PADRAO);
             ObjectOutputStream transmissor =
                     new ObjectOutputStream(conexaoServidor.getOutputStream());
