@@ -91,6 +91,9 @@ document.getElementById("btnLogin").addEventListener("click", async (e) => {
             return;
         }
 
+        localStorage.setItem("userOid", data.user._id);
+        console.log("OID armazenado:", data.user._id);
+
         alert("Login realizado com sucesso!");
         
         // Depois vamos trocar isso por JWT
