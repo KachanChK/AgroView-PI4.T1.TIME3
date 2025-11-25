@@ -1,10 +1,33 @@
 import { Request, Response } from "express";
 import { AuthService } from "./auth.service";
+import net from "net";
 
 const authService = new AuthService();
 
 export class AuthController {
-    async register(req: Request, res: Response) {
+
+    // Agora como ARROW FUNCTION → o this nunca se perde
+    validarSenhaComJava = (senha: string): Promise<boolean> => {
+        return new Promise((resolve, reject) => {
+            const client = new net.Socket();
+
+            client.connect(1010, "localhost", () => {
+                client.write(senha + "\n");
+            });
+
+            client.on("data", data => {
+                const resposta = data.toString().trim();
+                client.end();
+                resolve(resposta === "true");
+            });
+
+            client.on("error", err => {
+                reject(err);
+            });
+        });
+    };
+
+    register = async (req: Request, res: Response) => {
         try {
             const { name, email, telefone, documento, tipoDoc, password } = req.body;
 
@@ -14,6 +37,14 @@ export class AuthController {
 
             if (tipoDoc !== "cpf" && tipoDoc !== "cnpj") {
                 return res.status(400).json({ error: "Tipo de documento inválido!" });
+            }
+
+            const senhaAprovada = await this.validarSenhaComJava(password);
+
+            if (!senhaAprovada) {
+                return res.status(400).json({
+                    error: "Senha reprovada pelo validador de segurança."
+                });
             }
 
             const userData: any = {
@@ -39,9 +70,9 @@ export class AuthController {
         } catch (error: any) {
             return res.status(400).json({ error: error.message });
         }
-    }
-    
-    async login(req: Request, res: Response) {
+    };
+
+    login = async (req: Request, res: Response) => {
         try {
             const { email, password } = req.body;
 
@@ -50,6 +81,7 @@ export class AuthController {
             }
 
             const user = await authService.login(email, password);
+
             return res.status(200).json({
                 message: "Login realizado com sucesso!",
                 user
@@ -58,7 +90,5 @@ export class AuthController {
         } catch (error: any) {
             return res.status(400).json({ error: error.message });
         }
-    }
-
-
+    };
 }
