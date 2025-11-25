@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import { connectMongo } from "./database/mongo";
 import authRoutes from "./modules/auth/auth.routes";
+import plantioRoutes from "./modules/plantio/plantio.routes";
 
 const app = express();
 const PORT = 5000;
@@ -12,6 +13,7 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 
 // Rotas da API
 app.use("/api/auth", authRoutes);
+app.use("/api/plantio", plantioRoutes);
 
 // Rotas de página
 app.get("/auth", (req, res) => {

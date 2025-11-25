@@ -1,204 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AgroView - Dashboard & Meteorologia</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    
-    <style>
-        :root {
-            --agro-dark: #1a3c26; 
-            --agro-green: #2E7D32; 
-            --agro-bg: #f5f7fb;
-            --agro-green-light: #e8f5e9;
-            --agro-yellow-light: #fff8e1;
-            --agro-blue-light: #e3f2fd;
-        }
-
-        body { 
-            background-color: var(--agro-bg); 
-            font-family: sans-serif; 
-            overflow-x: hidden; 
-        }
-        
-        .sidebar { 
-            background-color: var(--agro-dark); 
-            min-height: 100vh; 
-            color: white; 
-            width: 250px; 
-            position: fixed; 
-            top: 0; 
-            left: -250px; 
-            padding-top: 20px; 
-            z-index: 1050; 
-            transition: left 0.3s;
-        }
-        .sidebar.show {
-            left: 0; 
-        }
-
-        @media (min-width: 992px) { 
-            .sidebar {
-                left: 0; 
-            }
-        }
-        
-        .sidebar .nav-link { 
-            color: rgba(255,255,255,0.7); 
-            padding: 15px 20px; 
-            font-size: 1.1rem; 
-            border-left: 4px solid transparent; 
-        }
-        .sidebar .nav-link:hover { color: white; background-color: rgba(255,255,255,0.05); }
-        .sidebar .nav-link.active { color: white; background-color: rgba(255,255,255,0.1); border-left: 4px solid white; }
-        .brand-logo { 
-            font-size: 1.8rem; 
-            font-weight: bold; 
-            color: white; 
-            text-align: center; 
-            margin-bottom: 40px; 
-        }
-
-
-        .main-content { 
-            padding: 30px; 
-            margin-left: 0; 
-            transition: margin-left 0.3s;
-        }
-        @media (min-width: 992px) {
-            .main-content {
-                margin-left: 250px; 
-            }
-        }
-        
-        .sidebar-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1040;
-            display: none;
-        }
-        .sidebar-backdrop.show {
-            display: block;
-        }
-
-        header { 
-            position: sticky; 
-            top: 0; 
-            z-index: 999; 
-            background: white; 
-            padding: 15px 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 30px !important;
-        }
-        
-        .kpi-card { border: none; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.2s; }
-        .kpi-card:hover { transform: translateY(-3px); }
-        .icon-box { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-        .bg-green-light { background-color: #e8f5e9; color: var(--agro-green); }
-        .bg-orange-light { background-color: #fff3e0; color: #ff9800; }
-        .section-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); height: 100%; }
-        .profile-link { cursor: pointer; text-decoration: none; color: inherit; padding: 8px 12px; border-radius: 8px; transition: background-color 0.2s; }
-        .profile-link:hover { background-color: rgba(0,0,0,0.05); }
-
-        .weather-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .weather-current-icon { color: var(--agro-green); }
-        .weather-hourly { overflow-x: auto; white-space: nowrap; padding: 10px 0; }
-        .hourly-item { display: inline-block; width: 80px; text-align: center; border-right: 1px solid #eee; padding: 0 10px; }
-        .hourly-item:last-child { border-right: none; }
-        
-        .new-btn {
-            background: var(--agro-green);
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .new-btn:hover { background: #266b2a; }
-
-        .table-card {
-            background: white;
-            padding: 0;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            overflow: hidden; 
-        }
-
-        .table thead th { 
-            color: #555; 
-            font-weight: bold; 
-            border-bottom: 2px solid #eee;
-        }
-        .table td { padding: 14px 10px; vertical-align: middle; }
-
-        .tag {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            display: inline-block;
-        }
-
-        .tag-yellow { background: var(--agro-yellow-light); color: #c57c00; }
-        .tag-green  { background: var(--agro-green-light); color: var(--agro-green); }
-        .tag-blue   { background: var(--agro-blue-light); color: #1e88e5; }
-
-        .filter-select {
-            width: 180px;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            background: white;
-            cursor: pointer;
-        }
-
-        .content-section { 
-            display: none; 
-        }
-        .content-section.active { 
-            display: block; 
-        }
-    </style>
+    <link rel="stylesheet" href="styles/painel.css">
 </head>
+
 <body>
 
-    <nav class="sidebar d-flex flex-column">
+    <div class="sidebar-backdrop d-lg-none" id="sidebarBackdrop"></div>
+
+    <nav class="sidebar d-flex flex-column" id="sidebar">
         <div class="brand-logo">
-            <img src="./assets/Logo.png" alt="AgroView Logo"> 
+            <img src="assets/Logo.png" alt="AgroView Logo" class="img-fluid logo-img">
         </div>
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active" data-target="painel-geral" href="#"><i class="bi bi-grid-fill me-2"></i> Painel Geral</a>
+                <a class="nav-link active" data-target="painel-geral" href="#"><i class="bi bi-grid-fill me-2"></i>
+                    Painel Geral</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-target="meteorologia" href="#"><i class="bi bi-cloud-sun me-2"></i> Meteorologia</a>
+                <a class="nav-link" data-target="meteorologia" href="#"><i class="bi bi-cloud-sun me-2"></i>
+                    Meteorologia</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-target="plantios" href="#"><i class="bi bi-tree me-2"></i> Plantios</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-target="relatorios" href="#"><i class="bi bi-file-earmark-text me-2"></i> Relatórios</a>
+                <a class="nav-link" data-target="relatorios" href="#"><i class="bi bi-file-earmark-text me-2"></i>
+                    Relatórios</a>
             </li>
         </ul>
+        <div class="mt-auto p-4">
+            <small class="text-white-50">Versão 1.0.0</small>
+        </div>
     </nav>
 
     <main class="main-content">
-        
+
         <header class="d-flex justify-content-between align-items-center mb-5 bg-white p-3 rounded shadow-sm">
-            <button class="btn d-md-none"><i class="bi bi-list fs-4"></i></button>
+            <button class="btn d-lg-none" id="sidebarToggle"><i class="bi bi-list fs-4"></i></button>
             <div></div>
-            
+
             <a href="#" class="profile-link d-flex align-items-center" id="profileLink">
-                <div class="text-end me-3">
+                <div class="text-end me-3 d-none d-sm-block">
                     <h6 class="m-0 fw-bold">Pedro Kachan</h6>
                     <small class="text-muted">Administrador</small>
                 </div>
@@ -208,9 +57,9 @@
             </a>
         </header>
 
-        
+
         <section id="painel-geral" class="content-section active">
-            
+
             <div class="d-flex justify-content-between align-items-end mb-4">
                 <div>
                     <h2 class="fw-bold text-dark">Painel Geral</h2>
@@ -224,7 +73,7 @@
             </div>
 
             <div class="row g-4 mb-4">
-                <div class="col-md-3">
+                <div class="col-md-6 col-lg-3">
                     <div class="card kpi-card p-3">
                         <div class="d-flex justify-content-between mb-3">
                             <small class="text-muted">Área Total Cultivada</small>
@@ -234,7 +83,7 @@
                         <small class="text-muted fw-bold">Comece cadastrando um plantio!</small>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6 col-lg-3">
                     <div class="card kpi-card p-3">
                         <div class="d-flex justify-content-between mb-3">
                             <small class="text-muted">Receita do Mês</small>
@@ -244,7 +93,7 @@
                         <small class="text-muted fw-bold">Sem dados</small>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6 col-lg-3">
                     <div class="card kpi-card p-3">
                         <div class="d-flex justify-content-between mb-3">
                             <small class="text-muted">Estoque Atual</small>
@@ -254,7 +103,7 @@
                         <small class="text-muted fw-bold">N/A</small>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6 col-lg-3">
                     <div class="card kpi-card p-3">
                         <div class="d-flex justify-content-between mb-3">
                             <small class="text-muted">Consumo de Água</small>
@@ -267,7 +116,7 @@
             </div>
 
             <div class="row g-4">
-                <div class="col-md-7">
+                <div class="col-lg-7">
                     <div class="section-card">
                         <h5 class="fw-bold mb-4">Atividades Recentes</h5>
                         <div class="text-center p-5 border rounded bg-light">
@@ -278,7 +127,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-5">
+                <div class="col-lg-5">
                     <div class="section-card">
                         <h5 class="fw-bold mb-4">Safra Atual</h5>
                         <div class="text-center p-5 border rounded bg-light">
@@ -292,7 +141,7 @@
 
         </section>
         <section id="meteorologia" class="content-section">
-            
+
             <div>
                 <h2 class="fw-bold text-dark">Meteorologia</h2>
                 <p class="text-muted m-0 mb-4">Dados sobre o clima na área de plantio.</p>
@@ -312,7 +161,7 @@
                         <h1 class="display-1 fw-bold">0°<span class="fs-4 align-top">C</span></h1>
                         <p class="lead text-muted">Dados indisponíveis</p>
                     </div>
-                    <div class="col"></div> 
+                    <div class="col"></div>
                 </div>
 
                 <div class="row text-center border-top pt-3">
@@ -334,38 +183,84 @@
             <div class="weather-card mb-4">
                 <h5 class="fw-bold mb-3">Previsão por Hora</h5>
                 <div class="weather-hourly">
-                    <div class="hourly-item"><small class="text-muted">Agora</small><i class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i><h6 class="fw-bold m-0">N/A</h6></div>
-                    <div class="hourly-item"><small class="text-muted">14:00</small><i class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i><h6 class="fw-bold m-0">N/A</h6></div>
-                    <div class="hourly-item"><small class="text-muted">15:00</small><i class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i><h6 class="fw-bold m-0">N/A</h6></div>
-                    <div class="hourly-item"><small class="text-muted">16:00</small><i class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i><h6 class="fw-bold m-0">N/A</h6></div>
-                    <div class="hourly-item"><small class="text-muted">17:00</small><i class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i><h6 class="fw-bold m-0">N/A</h6></div>
-                    <div class="hourly-item"><small class="text-muted">18:00</small><i class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i><h6 class="fw-bold m-0">N/A</h6></div>
-                    <div class="hourly-item"><small class="text-muted">19:00</small><i class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i><h6 class="fw-bold m-0">N/A</h6></div>
-                    <div class="hourly-item"><small class="text-muted">20:00</small><i class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i><h6 class="fw-bold m-0">N/A</h6></div>
-                    <div class="hourly-item"><small class="text-muted">21:00</small><i class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i><h6 class="fw-bold m-0">N/A</h6></div>
-                    <div class="hourly-item"><small class="text-muted">22:00</small><i class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i><h6 class="fw-bold m-0">N/A</h6></div>
+                    <div class="hourly-item"><small class="text-muted">Agora</small><i
+                            class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i>
+                        <h6 class="fw-bold m-0">N/A</h6>
+                    </div>
+                    <div class="hourly-item"><small class="text-muted">14:00</small><i
+                            class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i>
+                        <h6 class="fw-bold m-0">N/A</h6>
+                    </div>
+                    <div class="hourly-item"><small class="text-muted">15:00</small><i
+                            class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i>
+                        <h6 class="fw-bold m-0">N/A</h6>
+                    </div>
+                    <div class="hourly-item"><small class="text-muted">16:00</small><i
+                            class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i>
+                        <h6 class="fw-bold m-0">N/A</h6>
+                    </div>
+                    <div class="hourly-item"><small class="text-muted">17:00</small><i
+                            class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i>
+                        <h6 class="fw-bold m-0">N/A</h6>
+                    </div>
+                    <div class="hourly-item"><small class="text-muted">18:00</small><i
+                            class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i>
+                        <h6 class="fw-bold m-0">N/A</h6>
+                    </div>
+                    <div class="hourly-item"><small class="text-muted">19:00</small><i
+                            class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i>
+                        <h6 class="fw-bold m-0">N/A</h6>
+                    </div>
+                    <div class="hourly-item"><small class="text-muted">20:00</small><i
+                            class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i>
+                        <h6 class="fw-bold m-0">N/A</h6>
+                    </div>
+                    <div class="hourly-item"><small class="text-muted">21:00</small><i
+                            class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i>
+                        <h6 class="fw-bold m-0">N/A</h6>
+                    </div>
+                    <div class="hourly-item"><small class="text-muted">22:00</small><i
+                            class="bi bi-question-circle fs-4 text-secondary my-2 d-block"></i>
+                        <h6 class="fw-bold m-0">N/A</h6>
+                    </div>
                 </div>
             </div>
 
             <div class="weather-card p-0">
                 <h5 class="fw-bold mb-3 p-4 border-bottom">Previsão por Dia</h5>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center"><span class="fw-bold" style="width: 50px;">Hoje</span><span class="text-muted flex-grow-1"><i class="bi bi-question-octagon me-2"></i> Sem dados</span><span class="me-3 text-primary fw-bold">N/A</span><span class="text-danger fw-bold me-2">N/A</span><span class="text-secondary">N/A</span></li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center"><span class="fw-bold" style="width: 50px;">Qui</span><span class="text-muted flex-grow-1"><i class="bi bi-question-octagon me-2"></i> Sem dados</span><span class="me-3 text-primary fw-bold">N/A</span><span class="text-danger fw-bold me-2">N/A</span><span class="text-secondary">N/A</span></li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center"><span class="fw-bold" style="width: 50px;">Sex</span><span class="text-muted flex-grow-1"><i class="bi bi-question-octagon me-2"></i> Sem dados</span><span class="me-3 text-primary fw-bold">N/A</span><span class="text-danger fw-bold me-2">N/A</span><span class="text-secondary">N/A</span></li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center"><span class="fw-bold" style="width: 50px;">Sáb</span><span class="text-muted flex-grow-1"><i class="bi bi-question-octagon me-2"></i> Sem dados</span><span class="me-3 text-primary fw-bold">N/A</span><span class="text-danger fw-bold me-2">N/A</span><span class="text-secondary">N/A</span></li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center"><span class="fw-bold"
+                            style="width: 50px;">Hoje</span><span class="text-muted flex-grow-1"><i
+                                class="bi bi-question-octagon me-2"></i> Sem dados</span><span
+                            class="me-3 text-primary fw-bold">N/A</span><span
+                            class="text-danger fw-bold me-2">N/A</span><span class="text-secondary">N/A</span></li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center"><span class="fw-bold"
+                            style="width: 50px;">Qui</span><span class="text-muted flex-grow-1"><i
+                                class="bi bi-question-octagon me-2"></i> Sem dados</span><span
+                            class="me-3 text-primary fw-bold">N/A</span><span
+                            class="text-danger fw-bold me-2">N/A</span><span class="text-secondary">N/A</span></li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center"><span class="fw-bold"
+                            style="width: 50px;">Sex</span><span class="text-muted flex-grow-1"><i
+                                class="bi bi-question-octagon me-2"></i> Sem dados</span><span
+                            class="me-3 text-primary fw-bold">N/A</span><span
+                            class="text-danger fw-bold me-2">N/A</span><span class="text-secondary">N/A</span></li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center"><span class="fw-bold"
+                            style="width: 50px;">Sáb</span><span class="text-muted flex-grow-1"><i
+                                class="bi bi-question-octagon me-2"></i> Sem dados</span><span
+                            class="me-3 text-primary fw-bold">N/A</span><span
+                            class="text-danger fw-bold me-2">N/A</span><span class="text-secondary">N/A</span></li>
                 </ul>
             </div>
         </section>
         <section id="plantios" class="content-section">
-            
+
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-end">
                     <div>
                         <h2 class="fw-bold text-dark">Plantios</h2>
                         <p class="text-muted m-0 mb-3">Gerencie e acompanhe seus plantios.</p>
 
-                        <button class="new-btn" onclick="alert('Abrir Modal de Novo Plantio')">
+                        <button class="new-btn" data-bs-toggle="modal" data-bs-target="#novoPlantioModal">
                             <i class="bi bi-plus-lg me-2"></i> Novo Plantio
                         </button>
                     </div>
@@ -382,7 +277,8 @@
             </div>
 
             <div class="table-card">
-                <div class="table-responsive"> <table class="table table-hover mb-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
                         <thead>
                             <tr>
                                 <th>Produto</th>
@@ -420,7 +316,7 @@
                     </table>
                 </div>
             </div>
-                    
+
         </section>
         <section id="relatorios" class="content-section">
             <h2 class="fw-bold text-dark">Relatórios</h2>
@@ -430,25 +326,180 @@
 
     </main>
 
+    <div class="modal fade" id="novoPlantioModal" tabindex="-1" aria-labelledby="novoPlantioModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="novoPlantioModalLabel"><i class="bi bi-seedling me-2"></i> Cadastrar
+                        Novo Plantio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formNovoPlantio">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label for="produto" class="form-label fw-bold">Produto / Cultura <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="produto" placeholder="Ex: Soja - Lote C"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="area" class="form-label">Área (ha) <span
+                                        class="text-danger">*</span></label>
+                                <input type="number" step="0.01" class="form-control" id="area" placeholder="0.00"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                                <select class="form-select" id="status" required>
+                                    <option value="plantado">Plantado</option>
+                                    <option value="crescimento">Crescimento</option>
+                                    <option value="pronto_colheita">Pronto para Colheita</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="dataPlantio" class="form-label">Data do Plantio <span
+                                        class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="dataPlantio" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="previsaoColheita" class="form-label">Previsão de Colheita</label>
+                                <input type="date" class="form-control" id="previsaoColheita">
+                            </div>
+
+                            <hr class="mt-4 mb-3">
+
+                            <div class="col-md-4">
+                                <label for="qtdPlantio" class="form-label">Qtd. Sementes (kg)</label>
+                                <input type="number" step="0.01" class="form-control" id="qtdPlantio"
+                                    placeholder="0.00">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="gastoEstimado" class="form-label">Gasto Estimado (R$)</label>
+                                <input type="number" step="0.01" class="form-control" id="gastoEstimado"
+                                    placeholder="0.00">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="producaoEsperada" class="form-label">Produção Esperada (Kg)</label>
+                                <input type="number" step="0.01" class="form-control" id="producaoEsperada"
+                                    placeholder="0.00">
+                            </div>
+
+                            <div class="col-12">
+                                <label for="observacao" class="form-label">Observação</label>
+                                <textarea class="form-control" id="observacao" rows="3"
+                                    placeholder="Adicione notas relevantes sobre o plantio..."></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="submit" form="formNovoPlantio" class="btn btn-primary new-btn-primary"><i
+                            class="bi bi-save me-2"></i> Salvar Plantio</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
-                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+            const navLinks = document.querySelectorAll('.sidebar .nav-link');
+            const formNovoPlantio = document.getElementById('formNovoPlantio');
 
-                const targetId = this.getAttribute('data-target');
-                this.classList.add('active');
-                document.getElementById(targetId).classList.add('active');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
+                    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+
+                    const targetId = this.getAttribute('data-target');
+                    this.classList.add('active');
+                    document.getElementById(targetId).classList.add('active');
+
+                    if (window.innerWidth < 992) {
+                        sidebar.classList.remove('show');
+                        sidebarBackdrop.classList.remove('show');
+                    }
+                });
             });
-        });
-        
-        document.getElementById('profileLink').addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('Acessando Configurações do Perfil!');
+
+            document.getElementById('profileLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Acessando Configurações do Perfil!');
+            });
+
+
+            sidebarToggle.addEventListener('click', function () {
+                sidebar.classList.toggle('show');
+                sidebarBackdrop.classList.toggle('show');
+            });
+
+            sidebarBackdrop.addEventListener('click', function () {
+                sidebar.classList.remove('show');
+                sidebarBackdrop.classList.remove('show');
+            });
+
+
+            if (formNovoPlantio) {
+                formNovoPlantio.addEventListener('submit', async function (e) {
+                    // plantio, area, quantidadePlantio, gastoEstimado, producaoEsperada, observacoes, status, dataPlantio, previsaoColheita, oid 
+                    e.preventDefault();
+
+                    const plantio = document.getElementById('produto').value;
+                    const area = document.getElementById('area').value;
+
+                    if (!plantio || area <= 0) {
+                        alert('Erro: Preencha o Produto e a Área (maior que zero) para continuar.');
+                        return;
+                    }
+
+                    const quantidadePlantio = document.getElementById('qtdPlantio').value;
+                    const gastoEstimado = document.getElementById('gastoEstimado').value;
+                    const producaoEsperada = document.getElementById('producaoEsperada').value;
+                    const observacoes = document.getElementById('observacao').value;
+                    const status = document.getElementById('status').value;
+                    const dataPlantio = document.getElementById('dataPlantio').value;
+                    const previsaoColheita = document.getElementById('previsaoColheita').value;
+                    const oid = localStorage.getItem("userOid");
+
+                    try {
+                        const response = await fetch("/api/plantio/registerPlantio", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ plantio, area, quantidadePlantio, gastoEstimado, producaoEsperada, observacoes, status, dataPlantio, previsaoColheita, oid })
+                        });
+
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            alert("Erro: " + data.error);
+                            return;
+                        }
+
+                        alert("Plantio cadastrado com sucesso!");
+                    } catch (error) {
+                        alert("Erro ao conectar com o servidor.");
+                    }
+
+                    console.log('Novo Plantio Cadastrado');
+
+                    const novoPlantioModalElement = document.getElementById('novoPlantioModal');
+                    const modal = bootstrap.Modal.getInstance(novoPlantioModalElement) || new bootstrap.Modal(novoPlantioModalElement);
+                    modal.hide();
+
+                    formNovoPlantio.reset();
+                });
+            }
         });
     </script>
 </body>
+
 </html>
