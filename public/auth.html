@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulário de Login e Cadastro</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css'>
+  <link rel="stylesheet" href="./styles/auth.css">
+</head>
+<body>
+
+<div class="container" id="container">
+    <div class="form-container sign-up-container">
+        <form action="#">
+            <h1>Criar Conta</h1>
+            
+            <input type="text" id="nameInput" placeholder="Nome Completo" required />
+            <input type="email" id="emailInput" placeholder="Email" required />
+            <input type="tel" id="telInput" placeholder="Telefone" required />
+            
+            <div class="doc-selector">
+                <label>
+                    <input type="radio" name="tipoDoc" value="cpf" checked onclick="mudarPlaceholder('cpf')"> CPF
+                </label>
+                <label>
+                    <input type="radio" name="tipoDoc" value="cnpj" onclick="mudarPlaceholder('cnpj')"> CNPJ
+                </label>
+            </div>
+            <input type="text" id="docInput" placeholder="Digite seu CPF" required />
+
+            <input type="password" id="passInput" placeholder="Senha" required />
+            <input type="password" id="passConfirmInput" placeholder="Confirmar Senha" required />
+            
+            <button id="btnCadastrar">Cadastrar</button>
+        </form>
+    </div>
+
+    <div class="form-container sign-in-container">
+        <form action="#">
+            <h1>Entrar</h1>
+            <input type="email" id="loginEmail" placeholder="Email" required/>
+            <input type="password" id="loginPassword" placeholder="Senha" required/>
+            <a href="#">Esqueceu sua senha?</a>
+            <button id="btnLogin">Entrar</button>
+        </form>
+    </div>
+
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>Bem-vindo de volta!</h1>
+                <p>Para se manter conectado, faça login com suas informações pessoais</p>
+                <button class="ghost" id="signIn">Entrar</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>Olá, Amigo!</h1>
+                <p>Insira seus dados pessoais e comece sua jornada conosco</p>
+                <button class="ghost" id="signUp">Cadastrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="./scripts/auth.js"></script>
+
+</body>
+</html>
