@@ -25,7 +25,7 @@ export class AuthController {
                 reject(err);
             });
         });
-    };
+    }; 
 
     register = async (req: Request, res: Response) => {
         try {
