@@ -16,6 +16,16 @@ public class Cliente {
         ServerSocket portaParaNode = new ServerSocket(PORTA_NODE);
         System.out.println("Aguardando Node.js na porta " + PORTA_NODE + "...");
 
+        Socket conexaoServidor = new Socket(HOST_PADRAO, PORTA_PADRAO);
+
+        ObjectOutputStream transmissor =
+                new ObjectOutputStream(conexaoServidor.getOutputStream());
+
+        ObjectInputStream receptor =
+                new ObjectInputStream(conexaoServidor.getInputStream());
+
+        Parceiro servidor = new Parceiro(conexaoServidor, receptor, transmissor);
+
         while (true) {
 
             Socket conexaoNode = portaParaNode.accept();
@@ -45,20 +55,11 @@ public class Cliente {
 
             // Se a senha for inválida, encerra e espera outro Node conectar
             if (!senhaValida) {
-                conexaoNode.close();
                 continue;
             }
 
-
-            Socket conexaoServidor = new Socket(HOST_PADRAO, PORTA_PADRAO);
-            ObjectOutputStream transmissor =
-                    new ObjectOutputStream(conexaoServidor.getOutputStream());
-            ObjectInputStream receptor =
-                    new ObjectInputStream(conexaoServidor.getInputStream());
-
-            Parceiro servidor = new Parceiro(conexaoServidor, receptor, transmissor);
-
             // envia pedido para sair
+            conexaoNode.close();
             servidor.receba(new PedidoPraSair());
 
             // fecha tudo
