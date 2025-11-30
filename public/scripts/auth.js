@@ -10,12 +10,29 @@ signInButton.addEventListener('click', () => {
     container.classList.remove("right-panel-active");
 });
 
-// Função para alterar o placeholder baseado na seleção
 function mudarPlaceholder(tipo) {
     const inputDoc = document.getElementById('docInput');
-    inputDoc.value = ""; // limpa o campo ao trocar
+    inputDoc.value = "";
     inputDoc.placeholder = tipo === "cpf" ? "Digite seu CPF" : "Digite seu CNPJ";
 }
+
+function toggleSenha(id, icon) {
+    const input = document.getElementById(id);
+
+    if (!input) {
+        console.log("Input não encontrado:", id);
+        return;
+    }
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+        input.type = "password";
+        icon.classList.replace("fa-eye-slash", "fa-eye");
+    }
+}
+
 
 document.getElementById("btnCadastrar").addEventListener("click", async (e) => {
     e.preventDefault();
@@ -95,11 +112,9 @@ document.getElementById("btnLogin").addEventListener("click", async (e) => {
         console.log("OID armazenado:", data.user._id);
 
         alert("Login realizado com sucesso!");
-        
-        // Depois vamos trocar isso por JWT
+
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        // redirecionar
         window.location.href = "/painel";
 
     } catch (error) {
