@@ -2,76 +2,76 @@ package org.example;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 import java.util.concurrent.Semaphore;
 
 public class Parceiro {
 
     private Socket conexao;
-    private ObjectInputStream receptor;
-    private ObjectOutputStream transmissor;
+    private BufferedReader receptor;
+    private PrintWriter transmissor;
 
-    private Comunicado proximoComunicado = null;
+    private String proximoComunicado = null;
 
-    private Semaphore mutEx = new Semaphore(1,true);
+    private Semaphore mutEx = new Semaphore(1, true);
 
-    public Parceiro(Socket conexao,ObjectInputStream receptor,ObjectOutputStream transmissor) throws Exception {
+    public Parceiro(Socket conexao, BufferedReader receptor, PrintWriter transmissor) throws Exception {
         if (conexao == null) {
             throw new Exception("Conexao ausente");
         }
-        if (receptor == null) {
-            throw new Exception("Receptor ausente");
-        }
-        if (transmissor == null) {
-            throw new Exception("Transmissor ausente");
-        }
 
         this.conexao = conexao;
-        this.transmissor = transmissor;
         this.receptor = receptor;
+        this.transmissor = transmissor;
+
     }
-    public void receba (Comunicado x) throws Exception {
-        try{
-            this.transmissor.writeObject(x);
-            this.transmissor.flush();
-        }catch(Exception IO){
-            throw new Exception("Erro de transmissao !");
+
+    public void receba(String json) throws Exception {
+        try {
+            this.transmissor.println(json);
+        } catch (Exception e) {
+            throw new Exception("Erro de transmissao!");
         }
     }
 
-    public Comunicado espie() throws Exception {
+    public String espie() throws Exception {
         try {
             this.mutEx.acquireUninterruptibly();
-            if (this.proximoComunicado == null) { this.proximoComunicado = (Comunicado)this.receptor.readObject(); }
+
+            if (this.proximoComunicado == null) {
+                this.proximoComunicado = this.receptor.readLine();
+            }
+
             this.mutEx.release();
             return this.proximoComunicado;
+
         } catch (Exception erro) {
-            throw new Exception("Erro de recepçao!");
+            throw new Exception("Erro de recepcao!");
         }
     }
 
-    public Comunicado envie () throws Exception {
+    public String envie() throws Exception {
         try {
             if (this.proximoComunicado == null) {
-                this.proximoComunicado = (Comunicado)this.receptor.readObject();
+                this.proximoComunicado = this.receptor.readLine();
             }
-            Comunicado ret =  this.proximoComunicado;
+
+            String retorno = this.proximoComunicado;
             this.proximoComunicado = null;
-            return ret;
-        }catch(Exception erro){
-            throw new Exception("Erro de recepcao !");
+
+            return retorno;
+
+        } catch (Exception erro) {
+            throw new Exception("Erro de recepcao!");
         }
     }
 
-    public void adeus () throws Exception {
-
+    public void adeus() throws Exception {
         try {
             this.transmissor.close();
             this.receptor.close();
             this.conexao.close();
-        }catch(Exception erro){
-            throw new Exception("Erro de desconeccao!");
+        } catch (Exception erro) {
+            throw new Exception("Erro de desconexao!");
         }
     }
 }
-

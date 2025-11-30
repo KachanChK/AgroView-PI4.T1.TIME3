@@ -4,81 +4,73 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-
-
 public class SupervisoraDeConexao extends Thread {
 
     private Parceiro usuario;
-    private Socket conexao;
-    private ArrayList<Parceiro> usuarios;
+    private final Socket conexao;
+    private final ArrayList<Parceiro> usuarios;
 
     public SupervisoraDeConexao(Socket conexao, ArrayList<Parceiro> usuarios) throws Exception {
 
-        if (conexao == null){
+        if (conexao == null)
             throw new Exception("Conexao ausente");
-        }
 
-        if (usuarios == null){
+        if (usuarios == null)
             throw new Exception("Usuarios ausentes");
-        }
 
         this.conexao = conexao;
         this.usuarios = usuarios;
     }
 
-    public void run(){
-        ObjectOutputStream transmissor;
+    @Override
+    public void run() {
 
-        try{
-            transmissor = new ObjectOutputStream(this.conexao.getOutputStream());
+        try {
 
-        } catch (Exception erro){ return;}
+            BufferedReader receptor = new BufferedReader(
+                    new InputStreamReader(this.conexao.getInputStream())
+            );
 
-        ObjectInputStream receptor = null;
-        try{
-            receptor = new ObjectInputStream(this.conexao.getInputStream());
+            PrintWriter transmissor = new PrintWriter(
+                    this.conexao.getOutputStream(), true
+            );
 
-        }catch (Exception erro){
-            try{
-                transmissor.close();
-            } catch (Exception erro2){return;}
-        }
+            this.usuario = new Parceiro(this.conexao, receptor, transmissor);
 
-        try{
-            this.usuario = new Parceiro (this.conexao,receptor,transmissor);
-        }catch (Exception erro){}
-
-        try{
-            synchronized (this.usuarios){
-                this.usuarios.add(this.usuario);
+            synchronized (usuarios) {
+                usuarios.add(usuario);
             }
-            for (;;) {
-                Comunicado comunicado = null;
 
-                try {
-                    comunicado = this.usuario.envie();
-                }
-                catch (Exception e) {
-                    return; // desconectou
-                }
+            String senhaRecebida = usuario.envie(); // BLOQUEIA esperando senha
 
-                if (comunicado instanceof PedidoPraSair) {
-                    synchronized (this.usuarios) {
-                        this.usuarios.remove(this.usuario);
-                    }
-                    try { this.usuario.adeus(); } catch (Exception e) {}
-                    return;
-                }
+            boolean valida;
 
-                // IGNORA QUALQUER OUTRO TIPO DE COMUNICADO
+            try {
+                Senha s = new Senha(senhaRecebida.trim());
+                valida = s.isSenhaValida();
             }
-        } catch (Exception erro){
-            try{
-                transmissor.close();
-                receptor.close();
-            } catch (Exception erro2){return;}
+            catch (Exception e) {
+                valida = false;
+            }
+
+            usuario.receba(valida ? "true" : "false");
+
         }
+        catch (Exception e) {
+            // erro já tratado abaixo
+        }
+        finally {
+            // garante que sempre remove
+            synchronized (usuarios) {
+                usuarios.remove(usuario);
+            }
 
+            try {
+                if (usuario != null)
+                    usuario.adeus();
+            } catch (Exception ignored) {}
 
+            try { conexao.close(); } catch (Exception ignored) {}
+        }
     }
 }

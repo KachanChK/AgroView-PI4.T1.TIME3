@@ -3,7 +3,6 @@ package org.example;
 import java.net.*;
 import java.util.*;
 
-
 public class AceitadoraDeConexao extends Thread {
 
     private ServerSocket pedido;
@@ -11,39 +10,43 @@ public class AceitadoraDeConexao extends Thread {
 
     public AceitadoraDeConexao(String porta, ArrayList<Parceiro> usuarios) throws Exception {
 
-        if (porta == null){
+        if (porta == null) {
             throw new Exception("Porta ausente");
         }
 
-        try{
+        try {
             this.pedido = new ServerSocket(Integer.parseInt(porta));
-        } catch (Exception erro){
-            throw new Exception("Porta invalida");
+        } catch (Exception erro) {
+            throw new Exception("Porta inválida");
         }
 
-        if (usuarios == null){
-            throw new Exception("Usuarios ausentes");
+        if (usuarios == null) {
+            throw new Exception("Usuários ausentes");
         }
-
 
         this.usuarios = usuarios;
     }
 
-    public void run(){
-        for(;;){
+    public void run() {
+        for (;;) {
+
             Socket conexao = null;
-            try{
+
+            try {
                 conexao = this.pedido.accept();
-            } catch (Exception erro){
+            } catch (Exception erro) {
+                continue; // tenta novamente
+            }
+
+            SupervisoraDeConexao supervisora;
+
+            try {
+                supervisora = new SupervisoraDeConexao(conexao, this.usuarios);
+            } catch (Exception erro) {
                 continue;
             }
 
-            SupervisoraDeConexao supervisoraDeConexao = null;
-
-            try{
-                supervisoraDeConexao = new SupervisoraDeConexao (conexao,usuarios);
-            }catch (Exception erro){}
-            supervisoraDeConexao.start();
+            supervisora.start();
         }
     }
 }
