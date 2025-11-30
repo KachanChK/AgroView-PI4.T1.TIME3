@@ -14,8 +14,13 @@
             <h1>Criar Conta</h1>
             
             <input type="text" id="nameInput" placeholder="Nome Completo" required />
-            <input type="email" id="emailInput" placeholder="Email" required />
-            <input type="tel" id="telInput" placeholder="Telefone" required />
+
+            <input type="email" id="emailInput" placeholder="Email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Digite um email valido. Ex:exemplo@exemplo.com"/> 
+            <span class="error-msg" id="erroEmail"></span>
+        
+
+            <input type="tel" id="telInput" placeholder="Telefone" required maxlength="15"/>
+            <span class="error-msg" id="erroTel"></span>
             
             <div class="doc-selector">
                 <label>
@@ -24,8 +29,10 @@
                 <label>
                     <input type="radio" name="tipoDoc" value="cnpj" onclick="mudarPlaceholder('cnpj')"> CNPJ
                 </label>
+                
             </div>
-            <input type="text" id="docInput" placeholder="Digite seu CPF" required />
+            <input type="text" id="docInput" placeholder="Digite seu CPF" required maxlength="18"/>
+            <span class="error-msg" id="erroDoc"></span>
 
             <input type="password" id="passInput" placeholder="Senha" required />
             <input type="password" id="passConfirmInput" placeholder="Confirmar Senha" required />
@@ -37,7 +44,7 @@
     <div class="form-container sign-in-container">
         <form action="#">
             <h1>Entrar</h1>
-            <input type="email" id="loginEmail" placeholder="Email" required/>
+            <input type="email" id="loginEmail" placeholder="Email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"/>
             <input type="password" id="loginPassword" placeholder="Senha" required/>
             <a href="#">Esqueceu sua senha?</a>
             <button id="btnLogin">Entrar</button>

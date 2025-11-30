@@ -6,8 +6,7 @@ const authService = new AuthService();
 
 export class AuthController {
 
-    // Agora como ARROW FUNCTION → o this nunca se perde
-    validarSenhaComJava = (senha: string): Promise<boolean> => {
+    validarSenhaComJava = (senha: string): Promise<boolean | "Servidor não operando"> => {
         return new Promise((resolve, reject) => {
             const client = new net.Socket();
 
@@ -21,9 +20,9 @@ export class AuthController {
                 resolve(resposta === "true");
             });
 
-            client.on("error", err => {
-                reject(err);
-            });
+            client.on("error", () => {
+            resolve("Servidor não operando");
+        });
         });
     };
 
@@ -41,6 +40,14 @@ export class AuthController {
 
             const senhaAprovada = await this.validarSenhaComJava(password);
 
+            if (senhaAprovada === "Servidor não operando") {
+                return res.status(503).json({
+
+                    error: "Servidor não operando"
+
+                });
+            }
+            
             if (!senhaAprovada) {
                 return res.status(400).json({
                     error: "Senha reprovada pelo validador de segurança."
