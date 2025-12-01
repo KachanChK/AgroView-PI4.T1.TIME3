@@ -24,7 +24,7 @@ export class AuthController {
             resolve("Servidor não operando");
         });
         });
-    };
+    }; 
 
     register = async (req: Request, res: Response) => {
         try {

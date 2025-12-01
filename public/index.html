@@ -1,15 +1,62 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Teste Frontend</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroView</title>
+    <link rel="stylesheet" href="./styles/index.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
 
-  <h1>Primeira Tela</h1>
-  <button id="btn">Testar Backend</button>
-  <p id="msg"></p>
+    <header class="header">
+        <div class="brand-logo">
+            <img src="assets/Logo.png" alt="AgroView Logo" class="img-fluid logo-img">
+        </div>
+        <nav class="nav">
+            <a href="#" onclick="window.location.href = '/auth'" class="btn-primary">Entrar</a>
+            <a href="#" onclick="window.location.href = '/auth'" class="btn-primary">Criar conta</a>
+        </nav>
+    </header>
 
-  <script src="scripts/teste.js"></script>
+    <section class="hero">
+        <h1>Gerencie sua fazenda com Inteligência</h1>
+        <p>Sistema completo para monitoramento de produção, clima e gestão agrícola. Tome decisões baseadas em dados e
+            maximize sua produtividade.</p>
+
+        <div class="hero-buttons">
+            <a href="#" onclick="window.location.href = '/auth'" class="btn-primary">Comece Agora</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2>Recursos Principais</h2>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <i class="fa-solid fa-seedling icon"></i>
+                <h3>Gestão de Plantio</h3>
+                <p>Acompanhe o progresso de suas safras em tempo real</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-cloud-sun icon"></i>
+                <h3>Monitoramento Climático</h3>
+                <p>Dados meteorológicos precisos para planejamento</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-file-lines icon"></i>
+                <h3>Relatórios Detalhados</h3>
+                <p>Visualize dados e tendências de forma clara</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer"></footer>
+
 </body>
+
 </html>

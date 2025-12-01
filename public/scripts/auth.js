@@ -177,7 +177,23 @@ radios.forEach(r => {
     });
 });
 
-mudarPlaceholder("cpf");
+function toggleSenha(id, icon) {
+    const input = document.getElementById(id);
+
+    if (!input) {
+        console.log("Input não encontrado:", id);
+        return;
+    }
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+        input.type = "password";
+        icon.classList.replace("fa-eye-slash", "fa-eye");
+    }
+}
+
 
 document.getElementById("btnCadastrar").addEventListener("click", async (e) => {
     e.preventDefault();
@@ -286,12 +302,13 @@ document.getElementById("btnLogin").addEventListener("click", async (e) => {
             return;
         }
 
+        localStorage.setItem("userOid", data.user._id);
+        console.log("OID armazenado:", data.user._id);
+
         alert("Login realizado com sucesso!");
-        
-        // Depois vamos trocar isso por JWT
+
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        // redirecionar
         window.location.href = "/painel";
 
     } catch (error) {
