@@ -256,16 +256,13 @@ header {
     display: block;
 }
 
-/* Adicionar para garantir que a imagem da logo se ajuste */
 .brand-logo img {
     max-width: 100px;
-    /* Ajuste o tamanho da sua logo aqui */
     height: auto;
     display: block;
     margin: 0 auto;
 }
 
-/* Estilo para o botão primário do modal (para combinar com o new-btn) */
 .new-btn-primary {
     background-color: var(--agro-green) !important;
     border-color: var(--agro-green) !important;

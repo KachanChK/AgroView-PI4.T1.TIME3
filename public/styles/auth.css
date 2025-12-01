@@ -85,12 +85,12 @@ form {
 input {
     background-color: #eee;
     border: none;
-    padding: 10px 15px; /* Reduzi levemente o padding vertical */
-    margin: 5px 0; /* Reduzi a margem para caber tudo */
+    padding: 10px 15px; 
+    margin: 5px 0; 
     width: 100%;
 }
 
-/* Estilo para o seletor de CPF/CNPJ */
+
 .doc-selector {
     display: flex;
     gap: 15px;
@@ -116,7 +116,7 @@ input {
     overflow: hidden;
     width: 768px;
     max-width: 100%;
-    min-height: 650px; /* AUMENTADO para caber os novos campos */
+    min-height: 650px; 
 }
 
 .form-container {
@@ -230,7 +230,7 @@ input {
 }
 
 .social-container {
-    margin: 10px 0; /* Reduzido levemente */
+    margin: 10px 0; 
 }
 
 .social-container a {
