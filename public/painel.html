@@ -269,7 +269,7 @@
                             </tr>
                         </thead>
 
-                        <tbody>
+                        <tbody id="tabelaPlantio">
                             <tr>
                                 <td><i class="bi bi-corn me-2 text-warning"></i> Soja - Lote A</td>
                                 <td class="d-none d-md-table-cell">500 ha</td>
@@ -475,8 +475,94 @@
                     modal.hide();
 
                     formNovoPlantio.reset();
+                    carregarPlantios();
                 });
             }
+
+            const tabela = document.getElementById("tabelaPlantio");
+
+            const userId = localStorage.getItem("userOid");
+
+            async function carregarPlantios() {
+                console.log("UserId carregado:", userId);
+                try {
+                    const response = await fetch(`/api/plantio/listarPlantios/${userId}`);
+
+                    if (!response.ok) {
+                        throw new Error("Erro ao buscar dados");
+                    }
+
+                    const plantios = await response.json();
+
+                    tabela.innerHTML = "";
+
+                    if (plantios.length === 0) {
+                        tabela.innerHTML = `
+                            <tr>
+                                <td colspan="6" style="text-align:center; padding:25px; color:#777;">
+                                    Nenhum plantio encontrado.
+                                </td>
+                            </tr>
+                        `;
+                        return;
+                    }
+
+                    plantios.forEach(p => {
+
+                        // Ícone do produto
+                        let icon = "bi-tree";
+                        let iconColor = "text-secondary";
+
+                        switch ((p.plantio || p.cultura)?.toLowerCase()) {
+                            case "soja":  icon = "bi-corn"; iconColor = "text-warning"; break;
+                            case "trigo": icon = "bi-wheat"; iconColor = "text-info"; break;
+                            case "milho": icon = "bi-droplet-half"; iconColor = "text-warning"; break;
+                        }
+
+                        const statusTag = {
+                            "Planejado": "tag-blue",
+                            "Crescimento": "tag-blue",
+                            "Plantado": "tag-green",
+                            "Pronto": "tag-yellow",
+                            "Colhido": "tag-red"
+                        }[p.status] || "tag-blue";
+
+                        const linha = document.createElement("tr");
+
+                        linha.innerHTML = `
+                            <td>
+                                <i class="bi ${icon} me-2 ${iconColor}"></i>
+                                ${p.plantio} - ${p.lote || ""}
+                            </td>
+
+                            <td class="d-none d-md-table-cell">${p.area} ha</td>
+
+                            <td class="d-none d-lg-table-cell">${p.dataPlantio}</td>
+
+                            <td class="d-none d-lg-table-cell">${p.previsaoColheita}</td>
+
+                            <td><span class="tag ${statusTag}">${p.status}</span></td>
+
+                            <td class="text-end d-none d-sm-table-cell">${p.producaoEsperada}</td>
+                        `;
+
+                        tabela.appendChild(linha);
+                    });
+
+                } catch (err) {
+                    console.error("Erro ao carregar tabela:", err);
+
+                    tabela.innerHTML = `
+                        <tr>
+                            <td colspan="6" style="text-align:center; padding:25px; color:#777;">
+                                Erro ao carregar dados.
+                            </td>
+                        </tr>
+                    `;
+                }
+            }
+
+            carregarPlantios();
         });
     </script>
 </body>

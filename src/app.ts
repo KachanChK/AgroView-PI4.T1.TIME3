@@ -33,3 +33,5 @@ app.listen(PORT, async () => {
   console.log(`Servidor rodando em: http://localhost:${PORT}`);
   await connectMongo();
 });
+
+

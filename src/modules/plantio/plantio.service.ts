@@ -18,4 +18,16 @@ export class PlantioService {
             _id: result.insertedId
         };
     }
+
+    async listarPlantios(oid: string) {
+        const db = getDb();
+        const plantioCollection = db.collection<Plantio>("plantios");
+
+        const plantios = await plantioCollection
+            .find({ oid })
+            .sort({ createdAt: -1 })
+            .toArray();
+
+        return plantios;
+    }
 }
