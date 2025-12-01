@@ -75,8 +75,8 @@ document.getElementById("btnCadastrar").addEventListener("click", async (e) => {
             return;
         }
 
-        alert("Cadastro realizado com sucesso!");
-        window.location.href = "/painel";
+        alert("Cadastro realizado com sucesso! Agora faça o login.");
+        window.location.href = "/auth";
 
     } catch (err) {
         alert("Erro ao conectar com o servidor.");

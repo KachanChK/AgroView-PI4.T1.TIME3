@@ -39,4 +39,24 @@ export class PlantioController {
             return res.status(400).json({ error: error.message });
         }
     }
+
+    async listarPlantios(req: Request, res: Response) {
+        
+        try {
+            const { oid } = req.params;
+
+            if (!oid) {
+                return res.status(400).json({ error: "OID do usuário não informado." });
+            }
+
+            const plantios = await plantioService.listarPlantios(oid);
+
+            return res.status(200).json(plantios);
+            
+
+        } catch (error: any) {
+            console.error("Erro ao listar plantios:", error);
+            return res.status(500).json({ error: "Erro interno ao listar plantios." });
+        }
+    }
 }

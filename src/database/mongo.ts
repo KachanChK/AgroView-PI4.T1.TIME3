@@ -15,6 +15,7 @@ export async function connectMongo() {
   try {
     await client.connect();
     console.log("📦 MongoDB conectado com o Driver Oficial!");
+    return client.db("AgroViewDB");
   } catch (error) {
     console.error("Erro ao conectar no MongoDB:", error);
     process.exit(1);

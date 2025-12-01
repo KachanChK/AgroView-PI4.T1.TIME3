@@ -25,11 +25,8 @@ export class AuthService {
 
         const result = await usersCollection.insertOne(newUser);
 
-        return {
-            _id: result.insertedId,
-            name: data.name,
-            email: data.email
-        };
+        return existing;
+        
     }
     
     async login(email: string, password: string) {
