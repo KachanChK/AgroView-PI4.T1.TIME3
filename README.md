@@ -43,44 +43,12 @@ git checkout Servidor_Reformulado
 
 Execute a classe Servidor para ativar a validação de senha
 
-## 📁 **Modelos e Coleções do Banco de Dados**
 
-## 🧍‍♂️ **Cliente**
-- **cliente** – Identificador único do cliente
-- **nome** – Nome do cliente
-- **email** – Login no sistema
-- **senha** – Senha criptografada
-- **cpf_cnpj** – Documento
-- **telefone** – Contato telefônico
-- **data_cadastro** – Data de cadastro no sistema
-
-## 🌻 **Plantio**
-- **data_plantio** – Data em que o plantio iniciou
-- **data_prevista_colheita** – Estimativa baseada no ciclo
-- **status** – Plantado, Crescimento, Colheita...
-- **observacoes** – Observações gerais
-- **producao_esperada** – Produção estimada (toneladas/hectare)
-- **producao_real** – Produção real após colheita
-- **quantidade** – Unidade de produção (kg, sacas, etc.)
-- **gasto_estimado** – Custo estimado (R$)
-
-## ☁️ **Clima**
-- **data_registro** – Data da medição
-- **temperatura** – Temperatura (°C)
-- **umidade_ar** – Umidade relativa do ar (%)
-- **chuva** – Chuva (mm)
-- **vento** – Velocidade do vento (km/h)
-
-## 💾 **Tecnologias Utilizadas**
+## **Tecnologias Utilizadas**
 ###  Banco de Dados
 - **MongoDB**
-###  Back-end (API / Lógica de Negócio)
+###  Back-end
 - **Node.js**
-###  Servidor / Camada Corporativa
+- **Typescript**
+###  Servidor
 - **Java**
-###  Ferramentas de Desenvolvimento
-- **VSCode**
-- **IntelliJ IDEA**
-###  Controle de Versão
-- **Git**
-- **GitHub**
